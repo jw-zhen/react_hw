@@ -17,7 +17,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-export default function SimpleMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -27,7 +26,7 @@ export default function SimpleMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-}
+
 const useStyles = makeStyles({
   root: {
       background:'linear-gradient(45deg, #333 ,#999)',
