@@ -1,10 +1,14 @@
-import { useEffect } from 'react';
+/* eslint-disable */
+import { useEffect, useContext } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
   Button,
+  TableCell,
+  TableBody,
+  TableRow,
   Divider,
   Drawer,
   Hidden,
@@ -22,11 +26,10 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
+import { AppContext } from '../Context';
 
 const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: '維修部 助理工程師',
-  name: '00001 丁組長'
+  avatar: '/static/images/avatars/avatar_6.png'
 };
 
 const items = [
@@ -75,6 +78,8 @@ const items = [
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
 
+  const { suser } = useContext(AppContext);
+  console.log(suser);
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -107,18 +112,20 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           }}
           to="/app/account"
         />
-        <Typography
-          color="textPrimary"
-          variant="h5"
-        >
-          {user.name}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
-          {user.jobTitle}
-        </Typography>
+        <TableBody>
+          { suser.map(({
+            EmpId, EmpName, DeptName, JobTitle
+          }) => {
+            return (
+              <TableRow>
+                <TableCell>{EmpId}</TableCell>
+                <TableCell>{EmpName}</TableCell>
+                <TableCell>{DeptName}</TableCell>
+                <TableCell>{JobTitle}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>

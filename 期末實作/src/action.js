@@ -4,11 +4,14 @@ import { useEffect as checkEffect, useState as oState } from "react";
 import { useEffect as sEffect, useState as sState } from "react";
 import { useState as rState } from "react";
 import { useState as uState } from "react";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const action = () => {
   let [products, setProducts] = useState([]);
     //userLength is for showing the Data Loading message.
   let [ProductLength, setProductLength] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost/php-react/all-products.php")
@@ -30,6 +33,30 @@ export const action = () => {
       });
   }, []);
 
+  const selectProduct = (newProduct) => {
+    fetch("http://localhost/php-react/select-product.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success === 1) {
+          setProducts(data.products);
+          Navigate('/app/customers', {replace: true});
+        } else {
+          setProducts();
+          Navigate('/app/customers', {replace: true});
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   // Inserting a new user into the database.
   const insertProduct = (newProduct) => {
     fetch("http://localhost/php-react/add-product.php", {
@@ -174,6 +201,30 @@ export const action = () => {
       });
   }, []);
 
+  const selectchecko = (newProduct) => {
+    fetch("http://localhost/php-react/checkoselect.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success === 1) {
+          setchecko(data.checko);
+          Navigate('/404', {replace: true});
+        } else {
+          setchecko();
+          Navigate('/404', {replace: true});
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   let [salesorders, setsalesorder] = sState([]);
   let [salesorderLength, setsalesorderLength] = sState(null);
 
@@ -197,6 +248,30 @@ export const action = () => {
       });
   }, []);
 
+  const selectorder = (newProduct) => {
+    fetch("http://localhost/php-react/selectorder.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success === 1) {
+          setsalesorder(data.salesorders);
+          navigate('/app/products', {replace: true});
+        } else {
+          setsalesorder();
+          navigate('/app/products', {replace: true});
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   // Inserting a new user into the database.
   const insertsalesorder = (newsalesorders) => {
     fetch("http://localhost/php-react/add-salesorder.php", {
@@ -337,7 +412,7 @@ export const action = () => {
     })
     .then((data) => {
       if (data.success) {
-        setorderdetial(data.orderdetial);
+        setorderdetial(data.orderdetail);
         setorderdetialLength(true);
       } else {
         setorderdetialLength(0);
@@ -466,27 +541,27 @@ const updatedetail = (detailData) => {
     });
 };
 
-let [users, setusers] = uState([]);
-let [usersLength, setusersLength] = uState(null);
+let [suser, setsuser] = uState([]);
 
-const checkusers = (empid) => {
+const loginuser = (newProduct) => {
   fetch("http://localhost/php-react/login.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(empid),
+    body: JSON.stringify(newProduct),
   })
     .then((res) => {
       return res.json();
     })
     .then((data) => {
-      if (data.success) {
-        setusers(data.users);
-        setusersLength(true);
-        window.navigate('http://localhost:3000/app/customers')
+      if (data.success === 1) {
+        setsuser(data.suser);
+        console.log(products);
+        navigate("/app/customers");
       } else {
-        setusersLength(0);
+        setsuser();
+        navigate("/login", {replace: true});
       }
     })
     .catch((err) => {
@@ -495,9 +570,11 @@ const checkusers = (empid) => {
 };
   
   return {
-    users,
-    usersLength,
-    checkusers,
+    loginuser,
+    selectorder,
+    selectchecko,
+    selectProduct,
+    suser,
     orderdetail,
     salesorders,
     checko,

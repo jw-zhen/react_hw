@@ -1,9 +1,7 @@
 import { Helmet } from 'react-helmet';
-import { Link as RouterLink } from 'react-router-dom';
 import { Formik } from 'formik';
 import {
   Box,
-  Link,
   Button,
   Container,
   TextField,
@@ -13,7 +11,7 @@ import { useState as uState, useContext } from 'react';
 import { AppContext } from '../Context';
 
 const Login = () => {
-  const { checkusers } = useContext(AppContext);
+  const { loginuser } = useContext(AppContext);
   const [newuser, setNewuser] = uState({});
 
   const addNewuser = (e, field) => {
@@ -25,7 +23,7 @@ const Login = () => {
 
   const submitProduct = (e) => {
     e.preventDefault();
-    checkusers(newuser);
+    loginuser(newuser);
     e.target.reset();
   };
 
@@ -47,13 +45,12 @@ const Login = () => {
           <Formik
             initialValues={{
               id: '',
-              password: ''
+              Phone: ''
             }}
           >
             {({
               errors,
               handleBlur,
-              isSubmitting,
               touched
             }) => (
               <form onSubmit={submitProduct}>
@@ -84,33 +81,27 @@ const Login = () => {
                   onChange={(e) => addNewuser(e, 'EmpId')}
                 />
                 <TextField
-                  error={Boolean(touched.password && errors.password)}
+                  error={Boolean(touched.Phone && errors.Phone)}
                   fullWidth
-                  helperText={touched.password && errors.password}
+                  helperText={touched.Phone && errors.Phone}
                   label="Password(phone)"
                   margin="normal"
-                  name="password"
+                  name="Phone"
                   onBlur={handleBlur}
                   type="password"
                   variant="outlined"
+                  onChange={(e) => addNewuser(e, 'Phone')}
                 />
                 <Box sx={{ py: 2 }}>
-                  <Link
-                    component={RouterLink}
-                    to="/app/customers"
-                    variant="h6"
+                  <Button
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
                   >
-                    <Button
-                      color="primary"
-                      disabled={isSubmitting}
-                      fullWidth
-                      size="large"
-                      type="submit"
-                      variant="contained"
-                    >
-                      Sign in now
-                    </Button>
-                  </Link>
+                    Sign in now
+                  </Button>
                 </Box>
               </form>
             )}

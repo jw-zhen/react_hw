@@ -8,18 +8,37 @@ import {
   Link,
   Table,
   TableBody,
+  TextField,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
+  InputAdornment,
+  SvgIcon,
 } from '@material-ui/core';
-import { useContext } from 'react';
+import { Search as SearchIcon } from 'react-feather';
+import { useContext, useState } from 'react';
 import { AppContext } from '../Context';
 
 const NotFound = () => {
   const {
     checko,
   } = useContext(AppContext);
+  
+  const [search, setsearch] = useState('');
+  const { selectchecko } = useContext(AppContext);
+  const addNewsalesorder = (e, field) => {
+    setsearch({
+      ...search,
+      [field]: e.target.value,
+    });
+  };
+
+  const submitsalesorder = (e) => {
+    e.preventDefault();
+    selectchecko(search);
+    e.target.reset();
+  };
 
   return (
     <Card>
@@ -38,8 +57,71 @@ const NotFound = () => {
           >
             return
           </Button>
-        </Link>         
-        <Box sx={{ minWidth: 1050 }}>
+        </Link>
+        <Table>
+          <TableRow>
+            <TableCell>開始日期</TableCell>
+            <TableCell>結束日期</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <TextField
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SvgIcon
+                        fontSize="small"
+                        color="action"
+                      >
+                        <SearchIcon />
+                      </SvgIcon>
+                    </InputAdornment>
+                  )
+                }}
+                type="date"
+                placeholder="Search start data"
+                variant="outlined"
+                onChange={(e) => addNewsalesorder(e, 'datestart')}
+              />
+            </TableCell>
+            <TableCell>
+              <TextField
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SvgIcon
+                        fontSize="small"
+                        color="action"
+                      >
+                        <SearchIcon />
+                      </SvgIcon>
+                    </InputAdornment>
+                  )
+                }}
+                type="date"
+                placeholder="Search end data"
+                variant="outlined"
+                onChange={(e) => addNewsalesorder(e, 'dateend')}
+              />  
+            </TableCell>
+            <TableCell>
+              <form  onSubmit={submitsalesorder}>
+                <Button
+                  color="primary"
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
+                  search
+                </Button>
+              </form>
+            </TableCell>
+          </TableRow>
+        </Table>
+        <Box sx={{ minWidth: 850 }}>
           <Table>
             <TableHead>
               <TableRow>

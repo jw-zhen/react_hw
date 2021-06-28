@@ -6,12 +6,16 @@ import {
   Link,
   Card,
   Table,
+  InputAdornment,
+  TextField,
+  SvgIcon,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
 } from '@material-ui/core';
+import { Search as SearchIcon } from 'react-feather';
 import { useContext, useState as sState } from 'react';
 import { AppContext } from '../../Context';
 
@@ -55,6 +59,19 @@ const ProductCard = () => {
       onedeitals(OrderId);
     }
   };
+  const [search, setsearch] = sState('');
+  const { selectorder } = useContext(AppContext);
+  const gettext = (e, field) => {
+    setsearch({
+      ...search,
+      [field]: e.target.value,
+    });
+    console.log(search);
+    const o = {};
+    o.OrderId = e.target.value;
+    selectorder(o);
+    console.log(o);
+  };
 
   return (
     <Card>
@@ -74,6 +91,28 @@ const ProductCard = () => {
             insert
           </Button>
         </Link>
+        <center>
+          <Box sx={{ maxWidth: 500 }}>
+            <TextField
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SvgIcon
+                      fontSize="small"
+                      color="action"
+                    >
+                      <SearchIcon />
+                    </SvgIcon>
+                  </InputAdornment>
+                )
+              }}
+              placeholder="Search OrderId"
+              variant="outlined"
+              onChange={(e) => gettext(e, 'OrderId')}
+            />
+          </Box>
+        </center>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
             <TableHead>
